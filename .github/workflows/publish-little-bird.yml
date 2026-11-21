@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      statuses: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -40,13 +41,30 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag="little-bird-v$VERSION"
-          if gh release view "$tag" >/dev/null 2>&1; then
-            download_dir=$(mktemp -d)
-            gh release download "$tag" --dir "$download_dir" --pattern "$ARCHIVE" --pattern "$ARCHIVE.sha256"
-            cmp "dist/$ARCHIVE" "$download_dir/$ARCHIVE"
-            cmp "dist/$ARCHIVE.sha256" "$download_dir/$ARCHIVE.sha256"
-          else
+          if ! gh release view "$tag" >/dev/null 2>&1; then
             gh release create "$tag" "dist/$ARCHIVE" "dist/$ARCHIVE.sha256" \
               --target "$GITHUB_SHA" --prerelease --title "Little Bird $VERSION" \
               --notes-file packs/little-bird/RELEASE_NOTES.md
           fi
+          download_dir=$(mktemp -d)
+          gh release download "$tag" --dir "$download_dir" --pattern "$ARCHIVE" --pattern "$ARCHIVE.sha256"
+          cmp "dist/$ARCHIVE" "$download_dir/$ARCHIVE"
+          cmp "dist/$ARCHIVE.sha256" "$download_dir/$ARCHIVE.sha256"
+      - name: Record release status
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          if [[ "$JOB_STATUS" == success ]]; then
+            state=success
+            description="Release ZIP and checksum verified"
+            url=$(gh release view "little-bird-v$VERSION" --json url --jq .url)
+          else
+            state=failure
+            description="See workflow run for details"
+            url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" \
+            -f "state=$state" -f "context=Little Bird prerelease" \
+            -f "description=$description" -f "target_url=$url"
