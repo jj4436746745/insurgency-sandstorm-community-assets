@@ -2,6 +2,12 @@
 
 A player-flown Little Bird for custom Sandstorm maps. It uses the stock Sandstorm vehicle, seat, and audio systems. Place the helicopter once per desired spawn location. The helicopter creates its input relay during gameplay.
 
+## Download
+
+[Download the Little Bird preview ZIP](./previews/pilotable-little-bird-preview.zip?raw=true) (1.98 MB)
+
+This preview targets the Sandstorm Mod Editor (UE 4.27.2). A clean SDK import and gameplay validation are pending.
+
 ## Installation
 
 1. Close the Sandstorm Mod Editor. Open the ZIP and merge the contents of its `Content` folder into `SandstormEditor/Insurgency/Content`. Keep the directory structure intact so the helicopter and both shared material packages load under their existing `/Game/...` paths.
