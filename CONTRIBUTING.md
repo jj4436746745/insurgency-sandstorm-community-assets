@@ -22,4 +22,4 @@ Update [VERSION](packs/little-bird/VERSION) and [release notes](packs/little-bir
 
 When the version change merges to `main`, the workflow builds the ZIP and attaches it with its SHA-256 checksum to a prerelease tagged from that commit. The original ZIP link in `previews/` stays available.
 
-The current editable packages are small enough for regular Git. Revisit Git LFS when larger packs or frequent binary revisions start to grow the repository.
+Install Git LFS before cloning editable assets. In an existing clone, run `git lfs install` and `git lfs pull` after updating.
