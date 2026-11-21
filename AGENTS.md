@@ -2,6 +2,8 @@
 
 This repository ships editable asset packs for the Sandstorm Mod Editor (UE 4.27.2). Each pack keeps Unreal packages under `packs/<pack>/Content/` and documents installation, dependencies, and asset credits in its README.
 
+See the [Little Bird developer note](packs/little-bird/docs/development.md) for the Blueprint graph map.
+
 ## Editing assets
 
 - Fetch editable assets with Git LFS. Upload changed LFS objects and verify they can be fetched before merging.
