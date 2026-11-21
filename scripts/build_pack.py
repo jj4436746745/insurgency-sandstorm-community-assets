@@ -14,6 +14,7 @@ PACKAGE_MAGIC = {b"\xc1\x83\x2a\x9e", b"\x9e\x2a\x83\xc1"}
 def build_pack(pack: Path, output: Path) -> None:
     readme = pack / "README.md"
     content = pack / "Content"
+    # Include Unreal sidecar files and sort entries for repeatable builds.
     assets = sorted(
         path for path in content.rglob("*")
         if path.is_file() and path.suffix.lower() in UNREAL_EXTENSIONS
@@ -21,20 +22,24 @@ def build_pack(pack: Path, output: Path) -> None:
     packages = [path for path in assets if path.suffix.lower() in {".uasset", ".umap"}]
     if not readme.is_file() or not packages:
         raise ValueError(f"{pack}: expected README.md and Unreal packages under Content/")
+    # Keep packaged assets inside the pack.
     for path in assets:
         if path.is_symlink() or not path.resolve().is_relative_to(pack.resolve()):
             raise ValueError(f"{path}: expected a regular file inside the pack")
+    # Check the Unreal header to catch Git LFS pointers before packaging.
     for path in packages:
         with path.open("rb") as package:
             if package.read(4) not in PACKAGE_MAGIC:
                 raise ValueError(f"{path}: invalid Unreal package. Check for a Git LFS pointer.")
 
     output.parent.mkdir(parents=True, exist_ok=True)
+    # Build beside the output so a failed build preserves the previous ZIP.
     with NamedTemporaryFile(dir=output.parent, delete=False) as temp:
         staged = Path(temp.name)
     try:
         with ZipFile(staged, "w", compression=ZIP_DEFLATED) as archive:
             for path in [readme, *assets]:
+                # Preserve install paths and use fixed timestamps and file permissions.
                 entry = ZipInfo(path.relative_to(pack).as_posix())
                 entry.create_system = 3
                 entry.external_attr = 0o100644 << 16
