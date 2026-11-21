@@ -1,0 +1,52 @@
+name: Publish Little Bird preview
+
+on:
+  push:
+    branches: [main]
+    paths: [packs/little-bird/VERSION]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: little-bird-preview
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build the preview
+        run: |
+          version=$(cat packs/little-bird/VERSION)
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-preview\.[0-9]+$ ]]; then
+            echo "Expected a preview version such as 0.1.0-preview.1" >&2
+            exit 1
+          fi
+          archive="little-bird-$version.zip"
+          python3 scripts/build_pack.py little-bird
+          python3 -m zipfile -t dist/little-bird.zip
+          mv dist/little-bird.zip "dist/$archive"
+          (cd dist && sha256sum "$archive" > "$archive.sha256")
+          printf 'VERSION=%s\nARCHIVE=%s\n' "$version" "$archive" >> "$GITHUB_ENV"
+      - name: Publish or verify the prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="little-bird-v$VERSION"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            download_dir=$(mktemp -d)
+            gh release download "$tag" --dir "$download_dir" --pattern "$ARCHIVE" --pattern "$ARCHIVE.sha256"
+            cmp "dist/$ARCHIVE" "$download_dir/$ARCHIVE"
+            cmp "dist/$ARCHIVE.sha256" "$download_dir/$ARCHIVE.sha256"
+          else
+            gh release create "$tag" "dist/$ARCHIVE" "dist/$ARCHIVE.sha256" \
+              --target "$GITHUB_SHA" --prerelease --title "Little Bird $VERSION" \
+              --notes-file packs/little-bird/RELEASE_NOTES.md
+          fi
