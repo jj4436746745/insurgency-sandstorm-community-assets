@@ -1,0 +1,73 @@
+name: Convert editable Unreal assets to Git LFS
+
+on:
+  push:
+    branches: [maintenance/git-lfs]
+    paths: [.github/workflows/prepare-git-lfs.yml]
+
+permissions:
+  contents: write
+  statuses: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Convert the current packages
+        run: |
+          git lfs install --local
+          cat > .gitattributes <<'ATTRIBUTES'
+          * text=auto
+          *.uasset filter=lfs diff=lfs merge=lfs -text
+          *.umap filter=lfs diff=lfs merge=lfs -text
+          *.uexp filter=lfs diff=lfs merge=lfs -text
+          *.ubulk filter=lfs diff=lfs merge=lfs -text
+          *.uptnl filter=lfs diff=lfs merge=lfs -text
+          *.zip binary
+          ATTRIBUTES
+          git add .gitattributes
+          git add --renormalize -- packs/
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -m "Store editable Unreal packages in Git LFS"
+          git lfs fsck
+          git push origin "HEAD:$GITHUB_REF"
+          echo "MIGRATED_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Verify a fresh checkout and build
+        run: |
+          checkout_dir=$(mktemp -d)
+          GIT_LFS_SKIP_SMUDGE=1 git clone --quiet --depth=1 --branch "$GITHUB_REF_NAME" \
+            "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" "$checkout_dir"
+          cd "$checkout_dir"
+          test "$(git rev-parse HEAD)" = "$MIGRATED_SHA"
+          git lfs install --local
+          git lfs pull
+          git lfs fsck
+          python3 scripts/build_pack.py little-bird
+          python3 - <<'PY'
+          import subprocess
+          from pathlib import Path
+          from zipfile import ZipFile
+          packages = {str(p) for p in Path('packs').rglob('*.uasset')}
+          tracked = set(subprocess.check_output(['git', 'lfs', 'ls-files', '-n'], text=True).splitlines())
+          assert len(packages) == 13 and tracked == packages
+          with ZipFile('dist/little-bird.zip') as built, ZipFile('previews/pilotable-little-bird-preview.zip') as preview:
+              assert built.testzip() is None
+              assert set(built.namelist()) == set(preview.namelist())
+              assert all(built.read(name) == preview.read(name) for name in preview.namelist())
+          PY
+      - name: Report the migration result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          if [[ "$JOB_STATUS" == success ]]; then
+            state=success
+            url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/$MIGRATED_SHA"
+          else
+            state=failure
+            url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" \
+            -f "state=$state" -f "context=Git LFS migration" -f "target_url=$url"
