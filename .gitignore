@@ -1,0 +1,6 @@
+**/Binaries/
+**/DerivedDataCache/
+**/Intermediate/
+**/Saved/
+/dist/
+__pycache__/
