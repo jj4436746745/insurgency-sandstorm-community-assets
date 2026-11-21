@@ -10,10 +10,7 @@ Player-piloted helicopter with four passenger seats. Preview for Sandstorm Mod E
 
 ## Dependencies
 
-The ZIP includes these shared materials. Check existing copies before overwriting.
-
-- `/Game/Assets/MyBlueprints/UnbreakableGlassOnly/MI_Generic_Window_BulletProofGlass_01`
-- `/Game/Assets/MyMaterials/Humvee/MI_Humvee_BlackRubber`
+The ZIP includes the shared glass material `/Game/Assets/MyBlueprints/UnbreakableGlassOnly/MI_Generic_Window_BulletProofGlass_01`. Check any existing copy before overwriting.
 
 ## Credits
 
