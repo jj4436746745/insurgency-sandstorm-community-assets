@@ -1,7 +1,7 @@
-Pilotable Little Bird 0.1.0-preview.2 for the Sandstorm Mod Editor (UE 4.27.2).
+Pilotable Little Bird 0.1.0-preview.3 for the Sandstorm Mod Editor (UE 4.27.2).
 
-- Updated airframe, canopy, benches and rotors with cockpit instruments, optional fleet numbers and rotor blur.
-- Added fitted supports for the stock pods and explicit loading of the stock gun audio bank.
-- All 26 Unreal packages install under `/Game/Assets/MyBlueprints/LittleBirdPilotable/`. Clean SDK import and gameplay validation are pending.
+- Navigation lights choose a blink interval between 0.40 and 0.75 seconds when the helicopter initializes.
+- A crash plays the stock helicopter explosion and crash sound. The Little Bird wreck stays visible for 10 seconds.
+- The 27 Unreal packages install under `/Game/Assets/MyBlueprints/LittleBirdPilotable/`. The helicopter Blueprint compiled in the editor and package dependencies were checked. Clean SDK import and gameplay validation are pending.
 
 Installation and asset credits are in the ZIP's README.
