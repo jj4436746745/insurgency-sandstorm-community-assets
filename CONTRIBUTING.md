@@ -14,7 +14,7 @@ In the pull request, list changed packages, the SDK version, and checks performe
 python3 scripts/build_pack.py little-bird
 ```
 
-This writes `dist/little-bird.zip` with the pack README and installable files at their `Content/` paths.
+This writes `dist/little-bird.zip` with the pack README, license, and installable files at their `Content/` paths.
 
 ## Publish a Little Bird preview
 
