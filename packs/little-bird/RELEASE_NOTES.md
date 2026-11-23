@@ -1,7 +1,7 @@
-Pilotable Little Bird 0.1.0-preview.4 for the Sandstorm Mod Editor (UE 4.27.2).
+Pilotable Little Bird 0.1.0-preview.5 for the Sandstorm Mod Editor (UE 4.27.2).
 
-- New original low-poly airframe with a rounded canopy, open cabin, redesigned tail and new rotor meshes. The visible meshes use about 77% fewer triangles than Preview 3.
-- The original pack work is under CC0 1.0. Use, modify, and share it for any purpose, including commercially, with no attribution required.
-- The 26 Unreal packages install under `/Game/Assets/MyBlueprints/LittleBirdPilotable/`. The saved mesh sections, materials and package dependencies were checked in the editor. Clean SDK import and gameplay validation are pending.
+- Refined airframe with canopy seals and a wiper, engine louvers and hollow exhausts, skid and bench hardware, detailed rotor hubs and painted blade tips.
+- Updated cockpit and cabin with padded seats, loose harnesses, an intercom, cabin storage, fitted cyclic sticks and paired anti-torque pedals. The cockpit controls are modeled into the static mesh.
+- The 30 Unreal packages install under `/Game/Assets/MyBlueprints/LittleBirdPilotable/`. Saved mesh sections, materials, dependencies and 14 editor fit checks passed. Clean SDK import and gameplay validation are pending.
 
-The ZIP includes installation and upgrade instructions and the full CC0 legal text.
+The ZIP includes installation instructions and the CC0 1.0 dedication for the original pack work.
