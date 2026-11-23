@@ -4,7 +4,7 @@ Player-piloted helicopter with four passenger seats. Preview for Sandstorm Mod E
 
 ## Use it however you like
 
-The original work in this pack is dedicated to the public domain under [CC0 1.0 Universal](LICENSE). You can use, modify, share, or sell it for any purpose. Credit, permission, and keeping the license notice are optional.
+The original work in this pack is dedicated to the public domain. You can use, modify, share, or sell it for any purpose. You don't need permission or credit. You can keep your changes private or share them, and including the license notice is optional. [CC0 1.0 Universal](LICENSE)
 
 Sandstorm SDK assets and trademarks follow their own terms. Downloads from Preview 3 and earlier include a separately credited airframe under CC BY 4.0.
 
