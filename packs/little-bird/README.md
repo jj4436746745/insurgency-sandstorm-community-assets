@@ -2,6 +2,12 @@
 
 Player-piloted helicopter with four passenger seats. Preview for Sandstorm Mod Editor (UE 4.27.2). Clean SDK import and gameplay validation are pending.
 
+## Use it however you like
+
+The original work in this pack is dedicated to the public domain under [CC0 1.0 Universal](LICENSE). You can use, modify, share, or sell it for any purpose. Credit, permission, and keeping the license notice are optional.
+
+Sandstorm SDK assets and trademarks follow their own terms. Downloads from Preview 3 and earlier include a separately credited airframe under CC BY 4.0.
+
 ## Install
 
 1. With the editor closed, merge the ZIP's `Content/` into `SandstormEditor/Insurgency/Content`, preserving paths.
@@ -10,8 +16,6 @@ Player-piloted helicopter with four passenger seats. Preview for Sandstorm Mod E
 
 Add one actor tag from `LB_Airframe_01` through `LB_Airframe_04` to display an optional fleet number.
 
-## Credits
+If upgrading from Preview 3 or earlier, remove the retired `M_LittleBird_Palette.uasset` and `T_LittleBird_Palette.uasset` from `Content/Assets/MyBlueprints/LittleBirdPilotable/LittleBird/` once you have confirmed your own assets do not reference them.
 
-Airframe by mario low poly. Adapted for Unreal with separate glass and rotors, adjusted scale and pivots, passenger benches, and source weapon geometry removed. [Original model](https://sketchfab.com/3d-models/helicopters-mh-6-little-bird-69cb05db3fc3483cb729734262abf28e) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-
-Reuse terms for the other pack files are pending.
+The Blueprint uses assets supplied by the Sandstorm Mod Editor.
