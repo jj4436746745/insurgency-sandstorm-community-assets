@@ -16,6 +16,8 @@ Sandstorm SDK assets and trademarks follow their own terms. Downloads from Previ
 
 Add one actor tag from `LB_Airframe_01` through `LB_Airframe_04` to display an optional fleet number.
 
+Set **Aim Angle** on the placed Little Bird to adjust the gun and pilot sight together. The default is 10 degrees down from the aircraft's forward direction.
+
 If upgrading from Preview 3 or earlier, remove the retired `M_LittleBird_Palette.uasset` and `T_LittleBird_Palette.uasset` from `Content/Assets/MyBlueprints/LittleBirdPilotable/LittleBird/` once you have confirmed your own assets do not reference them.
 
 The Blueprint uses assets supplied by the Sandstorm Mod Editor.
